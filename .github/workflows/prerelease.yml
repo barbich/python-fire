@@ -36,7 +36,7 @@ jobs:
          python-version: '3.9'
 
      - name: Install wheel
-       run: python -m pip install whell
+       run: python -m pip install wheel
 
      # Build Python Fire using the build.sh script.
      - name: Run build script
