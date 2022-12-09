@@ -24,6 +24,7 @@ pip install --upgrade pylint pytest pytest-pylint pytest-runner
 pip install termcolor
 pip install hypothesis python-Levenshtein
 pip install mock
+pip install wheel
 python setup.py develop
 #python -m pytest  # Run the tests without IPython.
 pylint fire --ignore=test_components_py3.py,parser_fuzz_test.py,console

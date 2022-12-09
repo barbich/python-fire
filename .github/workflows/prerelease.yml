@@ -35,23 +35,22 @@ jobs:
        with:
          python-version: '3.9'
 
-     - name: Install cibuildwheel
-       run: python -m pip install cibuildwheel
+     - name: Install wheel
+       run: python -m pip install whell
 
      # Build Python Fire using the build.sh script.
      - name: Run build script
        shell: bash
-       run: ./.github/scripts/build.sh
+       run: ./.github/scripts/build-prerelease.sh
        env:
          PYTHON_VERSION: ${{ matrix.python-version }}
 
      - name: Run build wheels
-       run: python -m cibuildwheel --output-dir wheelhouse
+       run: pip wheel -w wheelhouse/ .
        env:
          PYTHON_VERSION: ${{ matrix.python-version }}
          CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
          CIBW_BUILD_VERBOSITY: 1
-
 
      - name: Store artifacts
        uses: actions/upload-artifact@v3
