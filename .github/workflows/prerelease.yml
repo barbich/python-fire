@@ -50,8 +50,6 @@ jobs:
        run: pip wheel -w wheelhouse/ .
        env:
          PYTHON_VERSION: ${{ matrix.python-version }}
-         CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }}
-         CIBW_BUILD_VERBOSITY: 1
 
      - name: Store artifacts
        uses: actions/upload-artifact@v3
