@@ -13,11 +13,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            python: 38
-            platform_id: manylinux_x86_64
-            manylinux_image: manylinux2014
-            python-version: 3.8
+          # - os: ubuntu-latest
+          #   python: 38
+          #   platform_id: manylinux_x86_64
+          #   manylinux_image: manylinux2014
+          #   python-version: 3.8
           - os: ubuntu-latest
             python: 39
             platform_id: manylinux_x86_64
