@@ -7,10 +7,22 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}-${{ matrix.manylinux_image }}
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python-version: [3.9]
+        include:
+          - os: ubuntu-latest
+            python: 38
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+            python-version: 3.8
+          - os: ubuntu-latest
+            python: 39
+            platform_id: manylinux_x86_64
+            manylinux_image: manylinux2014
+            python-version: 3.9
 
     steps:
      # Checkout the repo.
@@ -18,19 +30,29 @@ jobs:
        uses: actions/checkout@v3
 
      # Set up Python environment.
-     - name: Set up Python ${{ matrix.python-version }}
+     - name: Set up Python
        uses: actions/setup-python@v4
        with:
-         python-version: ${{ matrix.python-version }}
+         python-version: '3.9'
 
+     - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel
      # Build Python Fire using the build.sh script.
      - name: Run build script
        shell: bash
        run: ./.github/scripts/build.sh
        env:
          PYTHON_VERSION: ${{ matrix.python-version }}
-     - name: Uploads
+
+     - name: Run build wheels
+       run: python -m cibuildwheel --output-dir wheelhouse
+       env:
+         PYTHON_VERSION: ${{ matrix.python-version }}
+         CIBW_BUILD: cp${{ matrix.python }}-${{ matrix.platform_id }
+         CIBW_BUILD_VERBOSITY: 1
+
+
+     - name: Store artifacts
        uses: actions/upload-artifact@v3
        with:
-         name: my-artifact
-         path: dist/*
+         path: wheelhouse/*.whl
