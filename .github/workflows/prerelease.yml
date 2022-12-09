@@ -37,7 +37,6 @@ jobs:
 
      - name: Install wheel
        run: 
-         pip install --upgrade setuptools pip
          python -m pip install wheel
 
     #  # Build Python Fire using the build.sh script.
