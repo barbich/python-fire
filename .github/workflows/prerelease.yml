@@ -1,16 +1,16 @@
-name: Python Fire
+name: Python Fire Prerelease
 
 on:
   push:
     branches:
-      - "master"
+      - "autobuild"
 
 jobs:
   build:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        python-version: [2.7, 3.5, 3.7, 3.8, 3.9]
+        python-version: [3.9]
 
     steps:
      # Checkout the repo.
@@ -29,3 +29,8 @@ jobs:
        run: ./.github/scripts/build.sh
        env:
          PYTHON_VERSION: ${{ matrix.python-version }}
+     - name: Uploads
+       uses: actions/upload-artifact@v3
+       with:
+         name: my-artifact
+         path: dist/*
