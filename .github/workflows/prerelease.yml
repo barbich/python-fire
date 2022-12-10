@@ -6,8 +6,8 @@ on:
       - "autobuild"
 
 jobs:
-  build:
-    name: Build wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}-${{ matrix.manylinux_image }}
+  pre-release:
+    name: Build pre-release wheel for cp${{ matrix.python }}-${{ matrix.platform_id }}-${{ matrix.manylinux_image }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -37,6 +37,7 @@ jobs:
 
      - name: Install wheel
        run: |
+         python -m pip install --upgrade setuptools pip
          python -m pip install wheel six termcolor
 
     #  # Build Python Fire using the build.sh script.
@@ -51,17 +52,21 @@ jobs:
        env:
          PYTHON_VERSION: ${{ matrix.python-version }}
 
-     - name: Store artifacts
-       uses: actions/upload-artifact@v3
-       with:
-         path: wheelhouse/fire*.whl
+    #  - name: Store artifacts
+    #    uses: actions/upload-artifact@v3
+    #    with:
+    #      path: wheelhouse/fire*.whl
+
+     - name: Get current date
+       id: date
+       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
      - uses: "marvinpinto/action-automatic-releases@latest"
        with:
          repo_token: "${{ secrets.GITHUB_TOKEN }}"
          automatic_release_tag: "latest"
-         draft: true
-         title: "Automatic Build"
+         prerelease: true
+         title: "Automatic Build ${{ steps.date.outputs.date }}"
          files: |
            wheelhouse/fire*.whl
 
