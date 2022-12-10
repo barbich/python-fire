@@ -59,14 +59,14 @@ jobs:
 
      - name: Get current date
        id: date
-       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+       run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
      - uses: "marvinpinto/action-automatic-releases@latest"
        with:
          repo_token: "${{ secrets.GITHUB_TOKEN }}"
          automatic_release_tag: "latest"
          prerelease: true
-         title: "Automatic Build ${{ steps.date.outputs.date }}"
+         title: "Automatic Build ${{ env.date }}"
          files: |
            wheelhouse/fire*.whl
 
